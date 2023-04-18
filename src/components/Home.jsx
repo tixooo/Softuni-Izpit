@@ -1,18 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import {
-  Avatar,
-  Button,
-  CssBaseline,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Grid,
-  Box,
-  Typography,
-  Container,
-} from "@mui/material";
+import { Button, CssBaseline, Box, Typography, Container } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 const theme = createTheme();
 

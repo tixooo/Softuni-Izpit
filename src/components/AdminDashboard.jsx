@@ -1,91 +1,154 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "./AuthProvider";
 import { Button } from "@mui/material";
+import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import MuiDrawer from "@mui/material/Drawer";
+import Box from "@mui/material/Box";
+import MuiAppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import MenuIcon from "@mui/icons-material/Menu";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import AdminNavBar from "./AdminNavBar";
+import { Outlet } from "react-router-dom";
+
+const drawerWidth = 240;
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(["width", "margin"], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}));
+
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  "& .MuiDrawer-paper": {
+    position: "relative",
+    whiteSpace: "nowrap",
+    width: drawerWidth,
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    boxSizing: "border-box",
+    ...(!open && {
+      overflowX: "hidden",
+      transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      width: theme.spacing(7),
+      [theme.breakpoints.up("sm")]: {
+        width: theme.spacing(9),
+      },
+    }),
+  },
+}));
+
+const mdTheme = createTheme();
 
 export default function AdminDashboard() {
-  const { deleteUser, deleteInventoryAdmin } = useAuth();
-  const [action, setAction] = useState(null);
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    const inner = async () => {
-      fetch("http://localhost:8080/admin/getAllUsers", {
-        method: "GET",
-      }).then(async (res) => {
-        if (res.status === 200) setUsers((await res.json()).users);
-      });
-    };
-    inner();
-  }, []);
-
-  const deleteUserCb = (username) => {
-    const userIndex = users.findIndex((u) => u.username === username);
-    users.splice(userIndex, 1);
-    setUsers([...users]);
-  };
-
-  const deleteInventoryCb = (username, inventoryName) => {
-    const userIndex = users.findIndex((u) => u.username === username),
-      inventoryIndex = users[userIndex].data.inventories.findIndex(
-        (i) => i.name === inventoryName
-      );
-    users[userIndex].data.inventories.splice(inventoryIndex, 1);
-    setUsers([...users]);
+  const [open, setOpen] = useState(true);
+  const toggleDrawer = () => {
+    setOpen(!open);
   };
 
   return (
     <>
-      <h1>Admin Dashboard</h1>
-      <button
-        onClick={() => setAction(action === "deleteUser" ? null : "deleteUser")}
-      >
-        Delete User
-      </button>
-      <button
-        onClick={() =>
-          setAction(action === "deleteInventory" ? null : "deleteInventory")
-        }
-      >
-        Delete Inventory
-      </button>
-      {action === "deleteUser" ? (
-        <>
-          <p>All users: </p>
-          {users.map((user) => (
-            <div key={user.username}>
-              <p>{user.username}</p>
-              <Button
-                variant="contained"
-                onClick={() => deleteUser(user.username, deleteUserCb)}
+      <ThemeProvider theme={mdTheme}>
+        <Box sx={{ display: "flex" }}>
+          <CssBaseline />
+          <AppBar position="absolute" open={open}>
+            <Toolbar
+              sx={{
+                pr: "24px",
+              }}
+            >
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="open drawer"
+                onClick={toggleDrawer}
+                sx={{
+                  marginRight: "36px",
+                  ...(open && { display: "none" }),
+                }}
               >
-                Delete
-              </Button>
-            </div>
-          ))}
-        </>
-      ) : action === "deleteInventory" ? (
-        users.map((user) => (
-          <div key={user.username}>
-            <p>{user.username}</p>
-            {user.data.inventories.map((inventory) => (
-              <div key={inventory.name}>
-                <p>{inventory.name}</p>
-                <button
-                  onClick={() =>
-                    deleteInventoryAdmin(
-                      user.username,
-                      inventory.name,
-                      deleteInventoryCb
-                    )
-                  }
-                >
-                  Delete
-                </button>
-              </div>
-            ))}
-          </div>
-        ))
-      ) : null}
+                <MenuIcon />
+              </IconButton>
+              <Typography
+                component="h1"
+                variant="h6"
+                color="inherit"
+                noWrap
+                sx={{ flexGrow: 1 }}
+              >
+                Admin Panel
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <Drawer variant="permanent" open={open}>
+            <Toolbar
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                px: [1],
+              }}
+            >
+              <IconButton onClick={toggleDrawer}>
+                <ChevronLeftIcon />
+              </IconButton>
+            </Toolbar>
+            <Divider />
+            <AdminNavBar />
+          </Drawer>
+          <Box
+            component="main"
+            sx={{
+              backgroundColor: (theme) =>
+                theme.palette.mode === "light"
+                  ? theme.palette.grey[101]
+                  : theme.palette.grey[901],
+              flexGrow: 2,
+              height: "101vh",
+              overflow: "auto",
+            }}
+          >
+            <Toolbar />
+            <Container maxWidth="lg" sx={{ mt: 5, mb: 4 }}>
+              <Grid container spacing={4}>
+                <Grid item xs={13}>
+                  <Paper
+                    sx={{ p: 3, display: "flex", flexDirection: "column" }}
+                  >
+                    <Outlet />
+                  </Paper>
+                </Grid>
+              </Grid>
+            </Container>
+          </Box>
+        </Box>
+      </ThemeProvider>
     </>
   );
 }

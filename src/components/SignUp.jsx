@@ -1,23 +1,3 @@
-// import { Link } from "react-router-dom";
-// import { useAuth } from "./AuthProvider";
-
-// export default function SignUp() {
-//   const { onSignUp } = useAuth();
-
-//   return (
-//     <div>
-//       <h2>Sign Up</h2>
-//       <form onSubmit={onSignUp}>
-//         <label htmlFor="userName">User Name</label>
-//         <input type="text" name="userName" id="userName" />
-//         <label htmlFor="password">Password</label>
-//         <input type="password" name="password" id="password" />
-//         <button type="submit">Sign Up</button>
-//       </form>
-//       <Link to="/signIn">Already have an account? Sign in</Link>
-//     </div>
-//   );
-// }
 import * as React from "react";
 import { useAuth } from "./AuthProvider";
 import { Link } from "react-router-dom";
@@ -26,8 +6,6 @@ import {
   Button,
   CssBaseline,
   TextField,
-  FormControlLabel,
-  Checkbox,
   Grid,
   Box,
   Typography,

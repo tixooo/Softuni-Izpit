@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "./AuthProvider";
 import AddItems from "./AddItems";
-import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
@@ -70,7 +70,7 @@ export default function CreateInventory() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  const { onSubmit, result } = useAuth();
+  const { createInventory, result } = useAuth();
 
   return (
     <>
@@ -123,7 +123,7 @@ export default function CreateInventory() {
         </Drawer>
         <Box
           component="form"
-          onSubmit={(e) => onSubmit(e, items)}
+          onSubmit={(e) => createInventory(e, items)}
           sx={{
             backgroundColor: (theme) =>
               theme.palette.mode === "light"

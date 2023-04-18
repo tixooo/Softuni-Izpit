@@ -10,6 +10,8 @@ import Unauthorized from "./components/Unauthorized";
 import AdminRole from "./components/AdminRole";
 import AdminDashboard from "./components/AdminDashboard";
 import NotFound from "./components/NotFound";
+import AdminDeleteUser from "./components/AdminDeleteUser";
+import AdminDeleteInventory from "./components/AdminDeleteInventory";
 
 export default function App() {
   return (
@@ -25,6 +27,13 @@ export default function App() {
             <Route path="/createInventory" element={<CreateInventory />} />
           </Route>
           <Route path="/" element={<AdminRole />}>
+            <Route path="/" element={<AdminDashboard />}>
+              <Route path="/deleteUser" element={<AdminDeleteUser />} />
+              <Route
+                path="/deleteUserInventory"
+                element={<AdminDeleteInventory />}
+              />
+            </Route>
             <Route path="/admin" element={<AdminDashboard />} />
           </Route>
           <Route path="*" element={<NotFound />} />

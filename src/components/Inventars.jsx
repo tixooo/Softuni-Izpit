@@ -18,6 +18,7 @@ export default function Inventars() {
     result,
     deleteInventory,
   } = useAuth();
+  // from local storage
   const [inventories, setInventories] = useState(
     getUserData("user.data.inventories")
   );
@@ -34,7 +35,7 @@ export default function Inventars() {
     setEditItem(false);
     onEditItem(inventory, item, itemReplacement, cb);
   };
-
+  // sync the local storage with the database
   const onEditItemCb = (inventory, item, itemReplacement) => {
     inventory.items.splice(
       inventory.items.findIndex((i) => i.name === item.name),

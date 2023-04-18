@@ -84,8 +84,8 @@ const Drawer = styled(MuiDrawer, {
 
 const mdTheme = createTheme();
 
-function DashboardContent() {
-  const { getUserData } = useAuth("user.data.inventories");
+export default function Dashboard() {
+  const { getUserData } = useAuth();
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -166,8 +166,4 @@ function DashboardContent() {
       </Box>
     </ThemeProvider>
   );
-}
-
-export default function Dashboard() {
-  return <DashboardContent />;
 }

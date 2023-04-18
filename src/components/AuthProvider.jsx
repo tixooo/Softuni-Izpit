@@ -86,7 +86,7 @@ export default function AuthProvider({ children }) {
             "user",
             JSON.stringify({ ...user, isLoggedIn: true })
           );
-          if (user.user.role === "admin") navigate("/admin");
+          if (user.user.role === "admin") navigate("/deleteUser");
           else navigate("/dashboard");
         }
       })
@@ -96,8 +96,6 @@ export default function AuthProvider({ children }) {
   };
 
   const deleteInventory = (inventory, cb) => {
-    console.log(getUserData("user.username"));
-    console.log(getUserData("userName"));
     fetch("http://localhost:8080/user/deleteInventory", {
       method: "POST",
       headers: {
@@ -139,14 +137,15 @@ export default function AuthProvider({ children }) {
   };
 
   const deleteInventoryAdmin = (user, inventory, cb) => {
+    console.log(user.username);
     fetch("http://localhost:8080/admin/deleteInventory", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user: user,
-        inventory: inventory,
+        user,
+        inventory,
       }),
     }).then((res) => {
       if (res.status === 200) cb(user, inventory);
@@ -178,7 +177,7 @@ export default function AuthProvider({ children }) {
     signUp(user);
   };
 
-  const onSubmit = async (e, items) => {
+  const createInventory = async (e, items) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget),
       inventoryName = data.get("inventoryName");
@@ -279,7 +278,7 @@ export default function AuthProvider({ children }) {
     signUp,
     onSignUp,
     getUserData,
-    onSubmit,
+    createInventory,
     onDeleteItem,
     onAddItems,
     setUserInventories,
