@@ -16,6 +16,7 @@ export default function Inventars() {
     onDeleteItem,
     onAddItems,
     result,
+    deleteInventory,
   } = useAuth();
   const [inventories, setInventories] = useState(
     getUserData("user.data.inventories")
@@ -86,6 +87,16 @@ export default function Inventars() {
     }
   };
 
+  const deleteInventoryCb = (inventory) => {
+    const inventoryIdx = inventories.findIndex((i) => i.name === inventory);
+    if (inventoryIdx !== -1) {
+      inventories.splice(inventoryIdx, 1);
+      setInventories([...inventories]);
+      setUserInventories(inventories);
+      setShowInventory(null);
+    }
+  };
+
   return (
     <>
       {!showInventory ? (
@@ -113,6 +124,15 @@ export default function Inventars() {
       ) : (
         <>
           <h4>Inventory: {showInventory.name}</h4>
+          <Button
+            variant="contained"
+            onClick={() =>
+              deleteInventory(showInventory.name, deleteInventoryCb)
+            }
+          >
+            Delete inventory
+          </Button>
+
           {showInventory.items.length > 0 ? (
             <>
               <span>Items: </span>

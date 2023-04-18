@@ -3,7 +3,7 @@ import { useAuth } from "./AuthProvider";
 import { Button } from "@mui/material";
 
 export default function AdminDashboard() {
-  const { deleteUser, deleteInventory } = useAuth();
+  const { deleteUser, deleteInventoryAdmin } = useAuth();
   const [action, setAction] = useState(null);
   const [users, setUsers] = useState([]);
 
@@ -72,7 +72,7 @@ export default function AdminDashboard() {
                 <p>{inventory.name}</p>
                 <button
                   onClick={() =>
-                    deleteInventory(
+                    deleteInventoryAdmin(
                       user.username,
                       inventory.name,
                       deleteInventoryCb

@@ -95,6 +95,31 @@ export default function AuthProvider({ children }) {
       });
   };
 
+  const deleteInventory = (inventory, cb) => {
+    console.log(getUserData("user.username"));
+    console.log(getUserData("userName"));
+    fetch("http://localhost:8080/user/deleteInventory", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: getUserData("user.username"),
+        inventoryName: inventory,
+      }),
+    }).then(async (res) => {
+      if (res.status === 200) {
+        cb(inventory);
+        setResult("Successfuly deleted your inventory");
+      } else {
+        setResult("Error on deleting inventory.");
+      }
+      setTimeout(() => {
+        setResult(null);
+      }, 3000);
+    });
+  };
+
   const logOut = () => {
     localStorage.removeItem("user");
     navigate("/");
@@ -113,7 +138,7 @@ export default function AuthProvider({ children }) {
     });
   };
 
-  const deleteInventory = (user, inventory, cb) => {
+  const deleteInventoryAdmin = (user, inventory, cb) => {
     fetch("http://localhost:8080/admin/deleteInventory", {
       method: "POST",
       headers: {
@@ -261,9 +286,10 @@ export default function AuthProvider({ children }) {
     onEditItem,
     onSignIn,
     deleteUser,
-    deleteInventory,
+    deleteInventoryAdmin,
     logOut,
     result,
+    deleteInventory,
   };
 
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;

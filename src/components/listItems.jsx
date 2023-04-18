@@ -24,7 +24,7 @@ export default () => {
         </ListItemIcon>
         <ListItemText primary="Create inventory" />
       </ListItem>
-      <ListItem component="Button" onClick={logOut}>
+      <ListItem component="button" onClick={logOut}>
         <LogoutIcon>
           <LayersIcon />
         </LogoutIcon>

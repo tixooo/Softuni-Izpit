@@ -94,6 +94,23 @@ router.post("/editItem", async (req, res) => {
   }
 });
 
+router.post("/deleteInventory", async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.body.from }),
+      inventory = req.body.inventoryName;
 
+    const inventoryIndex = user.data.inventories.findIndex(
+      (i) => i.name === inventory
+    );
+    user.data.inventories.splice(inventoryIndex, 1);
+
+    user.markModified("data");
+    await user.save();
+
+    return res.sendStatus(200);
+  } catch (error) {
+    return res.status(400).json({ error });
+  }
+});
 
 module.exports = router;
